@@ -1,15 +1,13 @@
 # Control de Stock
 
-Este es un proyecto para llevar el control de stock de productos en un almacén o tienda.
+Este es un proyecto sencillo (en desarrollo) para llevar el control de stock de un negocio pequeño. La aplicación está desarrollada en Java y utiliza la librería JDBC para conectarse a una base de datos MySQL.
 
 ## Funcionalidades
 
-- Agregar un nuevo producto
-- Editar la información de un producto existente
-- Eliminar un producto
-- Ver la lista de todos los productos en stock
-- Filtrar la lista de productos por categoría
-- Ordenar la lista de productos por nombre, categoría, precio y cantidad en stock
+- Agregar productos al inventario
+- Actualizar información de productos existentes
+- Eliminar productos del inventario
+- Ver lista completa de productos
 
 ## Tecnologías utilizadas
 
@@ -17,18 +15,20 @@ Este es un proyecto para llevar el control de stock de productos en un almacén 
 - MySQL
 - Swing
 
+## Configuración
+
+Para utilizar esta aplicación, es necesario tener instalado Java y MySQL. Además, se debe crear una base de datos llamada "control_de_stock" y configurar la conexión en el archivo "database.properties".
+
 ## Instalación
 
 Para instalar y ejecutar este proyecto en tu computadora, sigue los siguientes pasos:
 
 1. Clona este repositorio en tu computadora
-2. Crea la base de datos en MySQL utilizando el script ubicado en la carpeta `database`
-3. Configura las credenciales de acceso a la base de datos en el archivo `database.properties`
-4. Ejecuta el archivo `Main.java` para iniciar la aplicación
+2. Para ejecutar la aplicación, se debe compilar el archivo "ControlDeStock.java" y luego ejecutar el archivo "ControlDeStock.class".
 
-## Contribuciones
+## Autor
 
-Las contribuciones son bienvenidas. Si deseas contribuir a este proyecto, puedes realizar un pull request con tus cambios.
+Este proyecto fue creado por Marcelo González y corresponde al curso ONE de Oracle.
 
 ## Licencia
 
