@@ -11,113 +11,116 @@ import java.util.List;
 import java.util.Map;
 
 import com.alura.jdbc.factory.ConnectionFactory;
+import com.alura.jdbc.modelo.Producto;
 
 public class ProductoController {
 
 	public int modificar(String nombre, String descripcion, Integer id) throws SQLException {
-		Connection conn = new ConnectionFactory().getConnection();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection conn = factory.getConnection();
 
-		StringBuilder updateQuery = new StringBuilder();
-		updateQuery.append("UPDATE producto SET nombre = ?, descripcion = ? ");
-		updateQuery.append("WHERE id = ?");
+		try(conn) {
+			StringBuilder updateQuery = new StringBuilder();
+			updateQuery.append("UPDATE producto SET nombre = ?, descripcion = ? ");
+			updateQuery.append("WHERE id = ?");
 
-		PreparedStatement st = conn.prepareStatement(updateQuery.toString());
-		st.setString(1, nombre);
-		st.setString(2, descripcion);
-		st.setInt(3, id);
-		st.execute();
+			final PreparedStatement ps = conn.prepareStatement(updateQuery.toString());
 
-		conn.close();
-
-		return st.getUpdateCount();
+			try(ps) {
+				ps.setString(1, nombre);
+				ps.setString(2, descripcion);
+				ps.setInt(3, id);
+				ps.execute();
+				return ps.getUpdateCount();
+			}
+		}
 	}
 
 	public int eliminar(Integer id) throws SQLException {
-		Connection conn = new ConnectionFactory().getConnection();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection conn = factory.getConnection();
 
-		String deleteQuery = "DELETE FROM producto WHER id = ?";
-		PreparedStatement st = conn.prepareStatement(deleteQuery);
-		st.setInt(1, id);
-		st.execute();
+		try(conn) {
+			String deleteQuery = "DELETE FROM producto WHERE id = ?";
+			final PreparedStatement ps = conn.prepareStatement(deleteQuery);
 
-		conn.close();
-
-		return st.getUpdateCount();
+			try(ps) {
+				ps.setInt(1, id);
+				ps.execute();
+				return ps.getUpdateCount();
+			}
+		}		
 	}
 
 	public List<Map<String, String>> listar() throws SQLException {
-		Connection conn = new ConnectionFactory().getConnection();
+		ConnectionFactory factory = new ConnectionFactory();
+		final Connection conn = factory.getConnection();
 
-		String selectQuery = "SELECT id, nombre, descripcion, cantidad FROM producto";
-		PreparedStatement ps = conn.prepareStatement(selectQuery);
-		ps.execute();
+		try(conn) {
+			String selectQuery = "SELECT id, nombre, descripcion, cantidad FROM producto";
+			final PreparedStatement ps = conn.prepareStatement(selectQuery);
 
-		ResultSet rs = ps.getResultSet();
-		List<Map<String, String>> resultado = new ArrayList<>();
-		while(rs.next()) {
-			Map<String, String> fila = new HashMap<>();
-			fila.put("id", String.valueOf(rs.getInt("id")));
-			fila.put("nombre", rs.getString("nombre"));
-			fila.put("descripcion", rs.getString("descripcion"));
-			fila.put("cantidad", String.valueOf(rs.getInt("cantidad")));
-			resultado.add(fila);
-		}
-		
-		conn.close(); // Se cierra la conexión
+			try(ps) {
+				ps.execute();
 
-		return resultado;
+				ResultSet rs = ps.getResultSet();
+				List<Map<String, String>> resultado = new ArrayList<>();
+				while(rs.next()) {
+					Map<String, String> fila = new HashMap<>();
+					fila.put("id", String.valueOf(rs.getInt("id")));
+					fila.put("nombre", rs.getString("nombre"));
+					fila.put("descripcion", rs.getString("descripcion"));
+					fila.put("cantidad", String.valueOf(rs.getInt("cantidad")));
+					resultado.add(fila);
+				}
+				return resultado;
+			}
+		}		
 	}
 
-    public void guardar(Map<String, String> producto) throws SQLException {
-		String nombre = producto.get("NOMBRE");
-		String descripcion = producto.get("DESCRIPCION");
-		Integer cantidad = Integer.valueOf(producto.get("CANTIDAD"));
-		Integer cantidadMaxima = 50;
+    public void guardar(Producto producto) throws SQLException {
 
 		ConnectionFactory factory = new ConnectionFactory();
-		Connection conn = factory.getConnection();
-		conn.setAutoCommit(false);
+		final Connection conn = factory.getConnection();
 
-		StringBuilder insertQuery = new StringBuilder();
-		insertQuery.append("INSERT INTO producto(nombre, descripcion, cantidad) ");
-		insertQuery.append("VALUES(?, ?, ?)");
-		PreparedStatement ps = conn.prepareStatement(insertQuery.toString(), Statement.RETURN_GENERATED_KEYS);
-		
-		try {
-			while(cantidad > 0) {
-				int cantidadAGuardar = Math.min(cantidad, cantidadMaxima);
-				executeSave(nombre, descripcion, cantidadAGuardar, ps);
-				cantidad -= cantidadMaxima;
+		try(conn) {
+			conn.setAutoCommit(false);
+
+			StringBuilder insertQuery = new StringBuilder();
+			insertQuery.append("INSERT INTO producto(nombre, descripcion, cantidad) ");
+			insertQuery.append("VALUES(?, ?, ?)");
+			final PreparedStatement ps = conn.prepareStatement(insertQuery.toString(), Statement.RETURN_GENERATED_KEYS);
+			
+			try(ps) {
+				executeSave(producto, ps);
+				conn.commit();			
 			}
-			conn.commit();			
 		} catch (Exception e) {
+			e.printStackTrace();
 			conn.rollback();
 		}
-		
-		ps.close();
-		conn.close();
 	}
 
 	/**
 	 * Ejecuta un insert con los parámetros recibidos
-	 * @param nombre Recibe el nombre del producto
-	 * @param descripcion Recibe la descripcion del producto
-	 * @param cantidad Recibe la cantidad disponible del producto
+	 * @param producto Recibe el objeto producto, del cual se extraerán los parámetros necesarios para el insert
 	 * @param conn Recibe la conexión a la base de datos
-	 * @param insertQuery Recibe el query a ser ejecutado
 	 */
-	private void executeSave(String nombre, String descripcion, Integer cantidad,
-							PreparedStatement ps) throws SQLException {
+	private void executeSave(Producto producto, PreparedStatement ps) throws SQLException {
 		
-		ps.setString(1, nombre);
-		ps.setString(2, descripcion);		
-		ps.setInt(3, cantidad);
+		ps.setString(1, producto.getNombre());
+		ps.setString(2, producto.getDescripcion());
+		ps.setInt(3, producto.getCantidad());
 
 		ps.execute();
 
-		ResultSet rs = ps.getGeneratedKeys();
-		while(rs.next()) {
-			System.out.println(String.format("Fue insertado el producto con ID: %d", rs.getInt(1)));
+		final ResultSet rs = ps.getGeneratedKeys();
+
+		try(rs) {
+			while(rs.next()) {
+				producto.setId(rs.getInt(1));
+				System.out.println(String.format("Fue insertado el producto %s", producto));
+			}
 		}
 	}
 

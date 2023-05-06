@@ -17,9 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import com.alura.jdbc.controller.CategoriaController;
 import com.alura.jdbc.controller.ProductoController;
+import com.alura.jdbc.modelo.Producto;
 
 public class ControlDeStockFrame extends JFrame {
 
@@ -185,12 +187,15 @@ public class ControlDeStockFrame extends JFrame {
 
         Optional.ofNullable(modelo.getValueAt(tabla.getSelectedRow(), tabla.getSelectedColumn()))
                 .ifPresentOrElse(fila -> {
-                    Integer id = Integer.valueOf(modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
-                    String nombre = (String) modelo.getValueAt(tabla.getSelectedRow(), 1);
-                    String descripcion = (String) modelo.getValueAt(tabla.getSelectedRow(), 2);
+                    Producto producto = new Producto();
+
+                    producto.setId(Integer.valueOf(modelo.getValueAt(tabla.getSelectedRow(), 0).toString()));
+                    producto.setNombre((String) modelo.getValueAt(tabla.getSelectedRow(), 1));
+                    producto.setDescripcion((String) modelo.getValueAt(tabla.getSelectedRow(), 2));
                     int cantidadActualizada;
                     try {
-                        cantidadActualizada = this.productoController.modificar(nombre, descripcion, id);
+                        cantidadActualizada = this.productoController.modificar(producto.getNombre(),
+                                                            producto.getDescripcion(), producto.getId());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -206,10 +211,12 @@ public class ControlDeStockFrame extends JFrame {
 
         Optional.ofNullable(modelo.getValueAt(tabla.getSelectedRow(), tabla.getSelectedColumn()))
                 .ifPresentOrElse(fila -> {
-                    Integer id = Integer.valueOf(modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
+                    Producto id = new Producto();
+                    id.setId(Integer.valueOf(modelo.getValueAt(tabla.getSelectedRow(), 0).toString()));
+
                     int cantidadEliminada;
                     try {
-                        cantidadEliminada = this.productoController.eliminar(id);
+                        cantidadEliminada = this.productoController.eliminar(id.getId());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -251,10 +258,7 @@ public class ControlDeStockFrame extends JFrame {
         }
 
         // TODO
-        var producto = new HashMap<String, String>();
-        producto.put("NOMBRE", textoNombre.getText());
-        producto.put("DESCRIPCION", textoDescripcion.getText());
-        producto.put("CANTIDAD", String.valueOf(cantidadInt));
+        var producto = new Producto(textoNombre.getText(), textoDescripcion.getText(), cantidadInt);
         
         var categoria = comboCategoria.getSelectedItem();
 
