@@ -27,7 +27,6 @@ Para instalar y ejecutar el sistema, sigue los siguientes pasos:
 1. Clona el repositorio del proyecto desde GitHub:
 ```
 git clone https://github.com/marcelogonve/control-de-stock.git
-
 ```
 2. Abre el proyecto en tu IDE de Java favorito (se recomienda utilizar Eclipse o IntelliJ IDEA).
 
@@ -47,4 +46,4 @@ Este proyecto fue creado por Marcelo González y corresponde al curso ONE de Ora
 
 ## Licencia
 
-Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
+Este proyecto está bajo la licencia MIT.
