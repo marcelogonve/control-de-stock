@@ -1,34 +1,49 @@
 # Control de Stock
 
-Este es un proyecto sencillo (en desarrollo) para llevar el control de stock de un negocio pequeño. La aplicación está desarrollada en Java y utiliza la librería JDBC para conectarse a una base de datos MySQL.
+Control de Stock es un sistema de gestión de inventario desarrollado en Java, utilizando el framework de Spring Boot. El objetivo de este proyecto es proporcionar una herramienta para ayudar a las empresas a realizar un seguimiento de sus inventarios y optimizar su gestión de stock.
 
-## Funcionalidades
+## Características
 
-- Agregar productos al inventario
-- Actualizar información de productos existentes
-- Eliminar productos del inventario
-- Ver lista completa de productos
+El sistema incluye las siguientes características:
 
-## Tecnologías utilizadas
+* Registro y seguimiento de productos: los usuarios pueden agregar nuevos productos y realizar un seguimiento de su cantidad en stock, precio y otra información relevante.
 
-- Java
-- MySQL
-- Swing
+* Registro y seguimiento de proveedores: los usuarios pueden agregar información de proveedores y llevar un seguimiento de los pedidos pendientes.
 
-## Configuración
+* Pedidos y recepción de mercancía: los usuarios pueden generar y enviar órdenes de compra a los proveedores y llevar un seguimiento de las entregas.
 
-Para utilizar esta aplicación, es necesario tener instalado Java y MySQL. Además, se debe crear una base de datos llamada "control_de_stock" y configurar la conexión en el archivo "database.properties".
+* Generación de informes: el sistema permite generar informes de inventario, listas de productos, pedidos pendientes, entre otros.
+
+## Requisitos del sistema
+
+* Java 8 o superior
+* Maven 3.2 o superior
+* MySQL 5.7 o superior
 
 ## Instalación
 
-Para instalar y ejecutar este proyecto en tu computadora, sigue los siguientes pasos:
+Para instalar y ejecutar el sistema, sigue los siguientes pasos:
 
-1. Clona este repositorio en tu computadora
-2. Para ejecutar la aplicación, se debe compilar el archivo "ControlDeStock.java" y luego ejecutar el archivo "ControlDeStock.class".
+1. Clona el repositorio del proyecto desde GitHub:
+```
+git clone https://github.com/marcelogonve/control-de-stock.git
 
-## Autor
+```
+2. Abre el proyecto en tu IDE de Java favorito (se recomienda utilizar Eclipse o IntelliJ IDEA).
 
-Este proyecto fue creado por Marcelo González y corresponde al curso ONE de Oracle.
+3. Crea una base de datos MySQL y actualiza las credenciales de la base de datos en el archivo application.properties.
+
+4. Ejecuta la aplicación utilizando el comando mvn spring-boot:run.
+
+5. Puedes abrir tu navegador y acceder a la dirección http://localhost:8080 o, en su defecto, ejecutar el fichero ControlDeStockMain.java, para que se te abra una ventana en tu SO.
+
+## Uso
+
+Una vez que la aplicación esté en funcionamiento, los usuarios pueden navegar a través de la interfaz de usuario y utilizar las diferentes funciones para gestionar el inventario y los pedidos de la empresa.
+
+## Créditos
+
+Este proyecto fue creado por Marcelo González y corresponde al curso ONE de Oracle Next Education.
 
 ## Licencia
 
