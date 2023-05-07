@@ -1,8 +1,8 @@
 package com.alura.jdbc;
 
-import javax.swing.JFrame;
-
 import com.alura.jdbc.view.ControlDeStockFrame;
+
+import javax.swing.JFrame;
 
 public class ControlDeStockMain {
     public static void main(String[] args) {

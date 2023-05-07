@@ -1,11 +1,10 @@
 package com.alura.jdbc.factory;
 
-import java.sql.Connection;
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.sql.DataSource;
 public class ConnectionFactory {
 
     private DataSource dataSource;
@@ -19,8 +18,13 @@ public class ConnectionFactory {
         this.dataSource = poolDataSource;
     }
     
-    public Connection getConnection() throws SQLException {
-        return this.dataSource.getConnection();
+    public Connection getConnection() {
+        try {
+            return this.dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        
     }
 
 }

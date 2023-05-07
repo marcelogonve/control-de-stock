@@ -16,6 +16,13 @@ public class Producto {
         this.cantidad = cantidad;
     }
 
+    public Producto(int id, String nombre, String descripcion, int cantidad) {
+        this.id = id;
+        this.nombre =  nombre;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
